@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/pocasi"
+        android:icon="@drawable/ic_mrak"
+        android:title="Počasí"/>
+
+    <item
+        android:id="@+id/Poznamky"
+        android:icon="@drawable/ic_poznamka"
+        android:title="Poznámky"/>
+
+    <item
+        android:id="@+id/Hodiny"
+        android:icon="@drawable/ic_hodiny"
+        android:title="Hodiny"/>
+
+</menu>
