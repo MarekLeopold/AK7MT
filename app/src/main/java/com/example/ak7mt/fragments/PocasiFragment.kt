@@ -1,32 +1,83 @@
 package com.example.ak7mt.fragments
 
+import android.os.AsyncTask
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.ak7mt.R
+import kotlinx.android.synthetic.main.fragment_pocasi.*
+import org.json.JSONObject
+import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PocasiFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PocasiFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    val CITY: String = "zlin,cz"
+    val API: String = "05f0c276cb9a2294e44993b69ebfcd4f"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+        weatherTask().execute()
+    }
+
+    inner class weatherTask() : AsyncTask<String, Void, String>() {
+        override fun onPreExecute() {
+            super.onPreExecute()
+            //errortext.visibility = View.GONE
+        }
+
+        override fun doInBackground(vararg p0: String?): String? {
+            var response: String?
+            try {
+                response = URL("https://api.openweathermap.org/data/2.5/weather?q=$CITY&lang=cz&units=metric&appid=$API").readText()
+            } catch (e: Exception) {
+                response = null
+            }
+            return response
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            try {
+                val jsonObj = JSONObject(result)
+                val main = jsonObj.getJSONObject("main")
+                val sys = jsonObj.getJSONObject("sys")
+                val wind = jsonObj.getJSONObject("wind")
+                val weather = jsonObj.getJSONArray("weather").getJSONObject(0)
+                val updatedAt: Long = jsonObj.getLong("dt")
+                val updateAtText = "Aktualizováno: " + SimpleDateFormat("dd/MM/yyy HH:mm", Locale.ENGLISH).format(Date(updatedAt * 1000))
+                val temp = main.getString("temp") + "°C"
+                val tempMin = "Minimum: " + main.getString("temp_min") + "°C"
+                val tempMax = "Maximum: " + main.getString("temp_max") + "°C"
+                val pressure = main.getString("pressure")
+                val humidity = main.getString("humidity")
+                val sunrise: Long = sys.getLong("sunrise")
+                val sunset: Long = sys.getLong("sunset")
+                val windSpeed = wind.getString("speed")
+                val weatherDescription = weather.getString("description")
+                val adresa = jsonObj.getString("name") + ", " + sys.getString("country")
+
+                adress.text = adresa
+                updated_at.text = updateAtText
+                predpoved.text = weatherDescription.capitalize()
+                maintemp.text = temp
+                temp_min.text = tempMin
+                temp_max.text = tempMax
+                vychod.text = SimpleDateFormat("HH:mm", Locale.ENGLISH).format(Date(sunrise))
+                zapad.text = SimpleDateFormat("HH:mm", Locale.ENGLISH).format(Date(sunset))
+                vitr.text = windSpeed
+                tlak.text = pressure
+                vlhkost.text = humidity
+
+            } catch (e: Exception) {
+                //errortext.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -36,25 +87,5 @@ class PocasiFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_pocasi, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PocasiFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PocasiFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
