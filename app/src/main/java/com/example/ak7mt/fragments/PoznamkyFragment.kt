@@ -1,60 +1,53 @@
 package com.example.ak7mt.fragments
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.ak7mt.R
+import kotlinx.android.synthetic.main.fragment_poznamky.*
+import kotlinx.android.synthetic.main.fragment_poznamky.view.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PoznamkyFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PoznamkyFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    val SHARED_PREFS = "sharedPrefs"
+    val TEXT = "text"
+    var hodnota: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        loadData()
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+
+        loadData()
+        val view: View = inflater!!.inflate(R.layout.fragment_poznamky, container, false)
+        view.textview.text = hodnota
+        view.save_button.setOnClickListener { view: View? ->
+            saveData()
+            textview.text = editText.text.toString()
+            editText.getText().clear()
         }
+
+        // Return the fragment view/layout
+        return view
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_poznamky, container, false)
+    fun saveData() {
+        val sharedPreferences = this.activity?.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        editor?.putString(TEXT, editText.text.toString())
+        editor?.apply()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PoznamkyFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PoznamkyFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    fun loadData() {
+        val sharedPreferences = this.activity?.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        hodnota = sharedPreferences?.getString(TEXT, "zlin,cz")
+
     }
+
 }

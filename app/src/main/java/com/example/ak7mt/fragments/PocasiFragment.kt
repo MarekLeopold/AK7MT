@@ -1,5 +1,6 @@
 package com.example.ak7mt.fragments
 
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,8 +17,11 @@ import java.util.*
 
 
 class PocasiFragment : Fragment() {
+    val SHARED_PREFS = "sharedPrefs"
+    val TEXT = "text"
 
-    val CITY: String = "zlin,cz"
+
+    var CITY: String ? = "praha,cz"
     val API: String = "05f0c276cb9a2294e44993b69ebfcd4f"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +39,7 @@ class PocasiFragment : Fragment() {
         override fun doInBackground(vararg p0: String?): String? {
             var response: String?
             try {
+                loadData()
                 response = URL("https://api.openweathermap.org/data/2.5/weather?q=$CITY&lang=cz&units=metric&appid=$API").readText()
             } catch (e: Exception) {
                 response = null
@@ -87,5 +92,11 @@ class PocasiFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_pocasi, container, false)
+    }
+
+    fun loadData() {
+        val sharedPreferences =
+            this.activity?.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+            CITY = sharedPreferences?.getString(TEXT, "zlin,cz")
     }
 }

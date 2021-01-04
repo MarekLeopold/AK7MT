@@ -6,9 +6,9 @@
         android:title="Počasí"/>
 
     <item
-        android:id="@+id/Poznamky"
+        android:id="@+id/Nastaveni"
         android:icon="@drawable/ic_poznamka"
-        android:title="Poznámky"/>
+        android:title="Nastavení"/>
 
     <item
         android:id="@+id/Hodiny"

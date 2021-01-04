@@ -3,18 +3,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PoznamkyFragment">
+    tools:context=".fragments.PoznamkyFragment"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_bg"
+    android:padding="25dp"
+    >
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Poznámky"
-            android:layout_centerInParent="true"
+            android:text="Nastavené město: "
+            android:textColor="#FFFFFF"
             />
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Nastavení"
+            android:textSize="30sp"
+            android:textColor="#FFFFFF"
+            android:gravity="center_horizontal"
+            />
+        >
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </EditText>
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Uložit město"></Button>
+        </LinearLayout>
+
 
     </RelativeLayout>
 
